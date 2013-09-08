@@ -5,32 +5,59 @@ use Encode;
 
 use Test::More;
 
-binmode(STDOUT, ':utf8');
 use POSIX ();
+
+my %test = (
+    en_US => {
+        lang    => 'English',
+        lc_time => 'en_US',
+        expect  => 'March Mar',
+    },
+    nl_NL => {
+        lang    => 'Dutch',
+        lc_time => 'nl_NL',
+        expect  => 'maart mrt',
+    },
+    de_DE => {
+        lang    => 'German',
+        lc_time => 'de_DE',
+        expect  => 'März Mär',
+    },
+    ru_RU => {
+        lang    => 'Russian',
+        lc_time => 'ru_RU',
+        expect  => 'марта мар',
+    },
+    uk_UA => {
+        lang => 'Ukraenian',
+        lc_time => 'uk_UA',
+        expect => 'березень бер',
+    },
+);
+
+chomp(my @locale_avail = qx/locale -a/);
+
+binmode(STDOUT, ':encoding(utf8)');
 my $first_lc_time = POSIX::setlocale(POSIX::LC_TIME());
 note("Default LC_TIME: $first_lc_time");
-{
-    use lc_time 'en_US';
-    my $t = strftime('%B %b', 0, 0, 0, 1, 2, 2013);
-    is($t, 'March Mar', encode('utf-8', "English: $t"));
-}
 
-{
-    use lc_time 'nl_NL';
-    my $t = strftime('%B %b', 0, 0, 0, 1, 2, 2013);
-    is($t, 'maart mrt', encode('utf-8', "Dutch: $t"));
-}
+for my $lc (keys %test) {
+    SKIP: {
+        my ($first_lc) = grep /^$test{$lc}{lc_time}/, @locale_avail;
+        if (!$first_lc) {
+            skip("No locale for $test{$lc}{lang} ($test{$lc}{lc_time})", 1);
+        }
 
-{
-    use lc_time 'ru_RU';
-    my $t = strftime('%B %b', 0, 0, 0, 1, 2, 2013);
-    is($t, 'марта мар', encode('utf-8', "Russian: $t"));
-}
-
-{
-    use lc_time 'de_DE';
-    my $t = strftime('%B %b', 0, 0, 0, 1, 2, 2013);
-    is($t, 'März Mär', encode('utf-8', "German: $t"));
+        note("Testing with $lc == $first_lc");
+        my $prog = << "        EOP";
+use warnings;
+use strict;
+use lc_time '$first_lc';
+strftime('%B %b', 0, 0, 0, 1, 2, 2013);
+        EOP
+        my $t = eval $prog;
+        is($t, $test{$lc}{expect}, encode('utf-8', "$test{$lc}{lang}: $t"));
+    }
 }
 
 my $curr_lc_time = POSIX::setlocale(POSIX::LC_TIME());

@@ -8,9 +8,10 @@ our $VERSION = 0.1;
 require Encode;
 
 use parent 'Exporter';
-use POSIX qw/ setlocale LC_TIME /;
+use POSIX qw/ setlocale LC_TIME LC_CTYPE /;
+use I18N::Langinfo qw/ langinfo CODESET /;
 
-our @EXPORT_OK = qw/ strftime /;
+our @EXPORT = qw/ strftime /;
 
 =head1 NAME
 
@@ -32,29 +33,43 @@ sub import {
     my ($locale) = @_;
 
     my ($pkg) = caller(0);
-    __PACKAGE__->export_to_level(1, $pkg, @EXPORT_OK);
+    __PACKAGE__->export_to_level(1, $pkg, @EXPORT);
 
-    $^H{LC_TIME} = $locale;
+    $^H{pragma_LC_TIME} = $locale;
 }
 
 sub unimport {
-    $^H{LC_TIME} = undef;
+    $^H{pragma_LC_TIME} = undef;
 }
 
 sub strftime {
     my ($pattern, @arguments) = @_;
     my $ctrl_h = (caller 0)[10];
 
-    my $lctime_was;
-    if ($ctrl_h->{LC_TIME} ) {
+    my ($lctime_is, $lctime_was);
+    if ($ctrl_h->{pragma_LC_TIME} ) {
         $lctime_was = setlocale(LC_TIME);
-        my $ret = setlocale(LC_TIME, $ctrl_h->{LC_TIME}) // '<undef>';
+        $lctime_is = setlocale(LC_TIME, $ctrl_h->{pragma_LC_TIME})
+            or die "Cannot set LC_TIME to '$ctrl_h->{pragma_LC_TIME}'\n";
     }
 
     my $strftime = POSIX::strftime($pattern, @arguments);
 
-    setlocale(LC_TIME, $lctime_was) if $lctime_was;
-    return Encode::decode('utf8', $strftime);
+    if ($lctime_was) {
+        setlocale(LC_TIME, $lctime_was);
+    }
+    return Encode::decode(get_locale_encoding($lctime_is), $strftime);
+}
+
+sub get_locale_encoding {
+    my $lc_time = shift;
+    return langinfo(CODESET) if !$lc_time;
+
+    my $tmp = setlocale(LC_CTYPE);
+    setlocale(LC_CTYPE, $lc_time);
+    my $encoding = langinfo(CODESET);
+    setlocale(LC_CTYPE, $tmp);
+    return $encoding;
 }
 
 1;
