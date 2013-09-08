@@ -8,7 +8,8 @@ our $VERSION = 0.1;
 require Encode;
 
 use parent 'Exporter';
-use POSIX qw/ setlocale LC_TIME LC_CTYPE /;
+use POSIX qw/ setlocale LC_TIME LC_CTYPE LC_ALL /;
+use constant MY_LC_TIME => $^O eq 'MSWin32' ? LC_ALL : LC_TIME;
 
 our @EXPORT = qw/ strftime /;
 
@@ -47,16 +48,17 @@ sub strftime {
 
     my ($lctime_is, $lctime_was);
     if (my $lctime = $ctrl_h->{pragma_LC_TIME} ) {
-        $lctime_was = setlocale(LC_TIME);
-        $lctime_is = setlocale(LC_TIME, $lctime)
+        $lctime_was = setlocale(MY_LC_TIME);
+        $lctime_is = setlocale(MY_LC_TIME, $lctime)
             or die "Cannot set LC_TIME to '$lctime'\n";
     }
 
     my $strftime = POSIX::strftime($pattern, @arguments);
 
     if ($lctime_was) {
-        setlocale(LC_TIME, $lctime_was);
+        setlocale(MY_LC_TIME, $lctime_was);
     }
+
     return Encode::decode(get_locale_encoding($lctime_is), $strftime);
 }
 
@@ -84,7 +86,7 @@ sub get_locale_encoding {
 sub guess_locale_encoding {
     my $lc_time = shift;
 
-    (my $encoding = $lc_time) =~ s/.+(?:\.|$)//;
+    (my $encoding = $lc_time) =~ s/.+?(?:\.|$)//;
     if ($encoding =~ /^[0-9]+$/) { # Windows cp...
         $encoding = "cp$encoding";
     }

@@ -11,7 +11,7 @@ my %test = (
     en_US => {
         lang    => 'English',
         lc_time => 'en_US',
-        win32   => 'English_United Status',
+        win32   => 'English_United States',
         expect  => qr/^March Mar\.?$/,
     },
     nl_NL => {
@@ -24,7 +24,7 @@ my %test = (
         lang    => 'German',
         lc_time => 'de_DE',
         win32   => 'German_Germany',
-        expect  => qr/^März Mär\.?$/,
+        expect  => qr/^März (?:Mär|Mrz)\.?$/,
     },
     gd_GB => {
         lang    => 'Gaelic',
@@ -33,34 +33,37 @@ my %test = (
         expect  => qr/^Am Màrt Màr\.?$/,
     },
     pt_PT => {
-        lang => 'Portuguese',
+        lang    => 'Portuguese',
         lc_time => 'pt_PT',
-        win32 => 'Portuguese_Portugal',
-        expect => qr/^Março Mar\.?$/,
+        win32   => 'Portuguese_Portugal',
+        expect  => qr/^Março Mar\.?$/,
     },
     ru_RU => {
         lang    => 'Russian',
         lc_time => 'ru_RU',
         win32   => 'Russian_Russia',
-        expect  => qr/^марта мар(?:та)?$/,
+        expect  => qr/^[мМ]арта? мар(?:та)?$/,
     },
     uk_UA => {
         lang    => 'Ukraenian',
         lc_time => 'uk_UA',
         win32   => 'Ukrainian_Ukraine',
-        expect  => qr/^(?:березня|березень) бер\.?$/,
+        expect  => qr/^(?:[бБ]ерезня|[бБ]ерезень) [бБ]ер\.?$/,
     },
 );
 
-chomp(my @locale_avail = qx/locale -a/);
+my @locale_avail;
+chomp(@locale_avail = qx/locale -a/) if $^O ne 'MSWin32';
 
 binmode(STDOUT, ':encoding(utf8)');
+
 my $first_lc_time = POSIX::setlocale(POSIX::LC_TIME());
 note("Default LC_TIME: $first_lc_time");
 
 for my $lc (keys %test) {
     SKIP: {
         my ($first_lc) = grep /^$test{$lc}{lc_time}/, @locale_avail;
+        $first_lc = $test{$lc}{win32} if $^O eq 'MSWin32';
         if (!$first_lc) {
             skip("No locale for $test{$lc}{lang} ($test{$lc}{lc_time})", 1);
         }
