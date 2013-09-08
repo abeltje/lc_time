@@ -11,27 +11,43 @@ my %test = (
     en_US => {
         lang    => 'English',
         lc_time => 'en_US',
-        expect  => 'March Mar',
+        win32   => 'English_United Status',
+        expect  => qr/^March Mar\.?$/,
     },
     nl_NL => {
         lang    => 'Dutch',
         lc_time => 'nl_NL',
-        expect  => 'maart mrt',
+        win32   => 'Dutch_Netherlands',
+        expect  => qr/^maart mrt\.?$/,
     },
     de_DE => {
         lang    => 'German',
         lc_time => 'de_DE',
-        expect  => 'März Mär',
+        win32   => 'German_Germany',
+        expect  => qr/^März Mär\.?$/,
     },
+    gd_GB => {
+        lang    => 'Gaelic',
+        lc_time => 'gd_GB',
+        win32   => '',
+        expect  => qr/^Am Màrt Màr\.?$/,
+    },
+    pt_PT => {
+        lang => 'Portuguese',
+        lc_time => 'pt_PT',
+        win32 => 'Portuguese_Portugal',
+        expect => qr/^Março Mar\.?$/,
     ru_RU => {
         lang    => 'Russian',
         lc_time => 'ru_RU',
-        expect  => 'марта мар',
+        win32   => 'Russian_Russia',
+        expect  => qr/^марта мар(?:та)?$/,
     },
     uk_UA => {
-        lang => 'Ukraenian',
+        lang    => 'Ukraenian',
         lc_time => 'uk_UA',
-        expect => 'березень бер',
+        win32   => 'Ukrainian_Ukraine',
+        expect  => qr/^(?:березня|березень) бер\.?$/,
     },
 );
 
@@ -56,7 +72,9 @@ use lc_time '$first_lc';
 strftime('%B %b', 0, 0, 0, 1, 2, 2013);
         EOP
         my $t = eval $prog;
-        is($t, $test{$lc}{expect}, encode('utf-8', "$test{$lc}{lang}: $t"));
+BAIL_OUT "$@" if $@;
+
+        like($t, $test{$lc}{expect}, encode('utf-8', "$test{$lc}{lang}: $t"));
     }
 }
 

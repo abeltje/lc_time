@@ -9,7 +9,6 @@ require Encode;
 
 use parent 'Exporter';
 use POSIX qw/ setlocale LC_TIME LC_CTYPE /;
-use I18N::Langinfo qw/ langinfo CODESET /;
 
 our @EXPORT = qw/ strftime /;
 
@@ -47,10 +46,10 @@ sub strftime {
     my $ctrl_h = (caller 0)[10];
 
     my ($lctime_is, $lctime_was);
-    if ($ctrl_h->{pragma_LC_TIME} ) {
+    if (my $lctime = $ctrl_h->{pragma_LC_TIME} ) {
         $lctime_was = setlocale(LC_TIME);
-        $lctime_is = setlocale(LC_TIME, $ctrl_h->{pragma_LC_TIME})
-            or die "Cannot set LC_TIME to '$ctrl_h->{pragma_LC_TIME}'\n";
+        $lctime_is = setlocale(LC_TIME, $lctime)
+            or die "Cannot set LC_TIME to '$lctime'\n";
     }
 
     my $strftime = POSIX::strftime($pattern, @arguments);
@@ -63,12 +62,35 @@ sub strftime {
 
 sub get_locale_encoding {
     my $lc_time = shift;
-    return langinfo(CODESET) if !$lc_time;
+    eval 'require I18N::Langinfo;';
+    my $has_i18n_langinfo = !$@;
+    if (!$lc_time) {
+        return $has_i18n_langinfo
+            ? I18N::Langinfo::langinfo(I18N::Langinfo::CODESET)
+            : '';
+    }
 
-    my $tmp = setlocale(LC_CTYPE);
-    setlocale(LC_CTYPE, $lc_time);
-    my $encoding = langinfo(CODESET);
-    setlocale(LC_CTYPE, $tmp);
+    my $encoding;
+    if ($has_i18n_langinfo) {
+        my $tmp = setlocale(LC_CTYPE);
+        setlocale(LC_CTYPE, $lc_time);
+        $encoding = I18N::Langinfo::langinfo(I18N::Langinfo::CODESET);
+        setlocale(LC_CTYPE, $tmp);
+    }
+
+    return $encoding || guess_locale_encoding($lc_time);
+}
+
+sub guess_locale_encoding {
+    my $lc_time = shift;
+
+    (my $encoding = $lc_time) =~ s/.+(?:\.|$)//;
+    if ($encoding =~ /^[0-9]+$/) { # Windows cp...
+        $encoding = "cp$encoding";
+    }
+    if (!$encoding && $^O eq 'darwin') {
+        $encoding = 'UTF-8';
+    }
     return $encoding;
 }
 
