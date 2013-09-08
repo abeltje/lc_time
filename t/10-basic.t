@@ -37,6 +37,7 @@ my %test = (
         lc_time => 'pt_PT',
         win32 => 'Portuguese_Portugal',
         expect => qr/^Março Mar\.?$/,
+    },
     ru_RU => {
         lang    => 'Russian',
         lc_time => 'ru_RU',
