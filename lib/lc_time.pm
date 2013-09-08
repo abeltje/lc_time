@@ -66,7 +66,7 @@ sub get_locale_encoding {
     my $has_i18n_langinfo = !$@;
     if (!$lc_time) {
         return $has_i18n_langinfo
-            ? I18N::Langinfo::langinfo(I18N::Langinfo::CODESET)
+            ? I18N::Langinfo::langinfo(I18N::Langinfo::CODESET())
             : '';
     }
 
@@ -74,7 +74,7 @@ sub get_locale_encoding {
     if ($has_i18n_langinfo) {
         my $tmp = setlocale(LC_CTYPE);
         setlocale(LC_CTYPE, $lc_time);
-        $encoding = I18N::Langinfo::langinfo(I18N::Langinfo::CODESET);
+        $encoding = I18N::Langinfo::langinfo(I18N::Langinfo::CODESET());
         setlocale(LC_CTYPE, $tmp);
     }
 
