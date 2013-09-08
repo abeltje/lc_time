@@ -1,0 +1,5 @@
+liblc-time-perl (0.0) UNRELEASED; urgency=low
+
+  * Initial release.
+
+ -- Abe Timmerman <abeltje@cpan.org>  Sun, 07 Jul 2013 12:02:30 +0200

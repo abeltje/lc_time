@@ -1,0 +1,17 @@
+Source: liblc-time-perl
+Section: perl
+Priority: optional
+Build-Depends: debhelper (>= 7)
+Build-Depends-Indep: perl (>= 5.6.0-12),
+    libparent-perl,
+    libtest-nowarnings-perl,
+    libtest-simple-perl
+Maintainer: Abe Timmerman <abeltje@cpan.org>
+Standards-Version: 3.8.0
+
+Package: liblc-time-perl
+Architecture: all
+Depends: ${perl:Depends},
+    ${misc:Depends},
+    libparent-perl
+Description: Lexical pragma for setting locale for LC_TIME

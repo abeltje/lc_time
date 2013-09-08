@@ -1,0 +1,6 @@
+MYMETA*
+.*.swp
+*~
+blib
+pm_to_blib
+Makefile
