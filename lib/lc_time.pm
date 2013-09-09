@@ -59,13 +59,15 @@ sub strftime {
         setlocale(MY_LC_TIME, $lctime_was);
     }
 
-    return Encode::decode(get_locale_encoding($lctime_is), $strftime);
+    my $encoding = get_locale_encoding($lctime_is);
+    return $encoding ? Encode::decode($encoding, $strftime) : $strftime;
 }
 
 sub get_locale_encoding {
     my $lc_time = shift;
     eval 'require I18N::Langinfo;';
     my $has_i18n_langinfo = !$@;
+
     if (!$lc_time) {
         return $has_i18n_langinfo
             ? I18N::Langinfo::langinfo(I18N::Langinfo::CODESET())

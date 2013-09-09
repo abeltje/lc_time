@@ -6,6 +6,7 @@ use Encode;
 use Test::More;
 
 use POSIX ();
+require lc_time;
 
 my %test = (
     en_US => {
@@ -57,7 +58,7 @@ chomp(@locale_avail = qx/locale -a/) if $^O ne 'MSWin32';
 
 binmode(STDOUT, ':encoding(utf8)');
 
-my $first_lc_time = POSIX::setlocale(POSIX::LC_TIME());
+my $first_lc_time = POSIX::setlocale(lc_time::MY_LC_TIME());
 note("Default LC_TIME: $first_lc_time");
 
 for my $lc (keys %test) {
@@ -82,7 +83,7 @@ BAIL_OUT "$@" if $@;
     }
 }
 
-my $curr_lc_time = POSIX::setlocale(POSIX::LC_TIME());
+my $curr_lc_time = POSIX::setlocale(lc_time::MY_LC_TIME());
 is($curr_lc_time, $first_lc_time, "LC_TIME reverted to $curr_lc_time");
 
 done_testing();
