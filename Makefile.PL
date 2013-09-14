@@ -14,6 +14,11 @@ WriteMakefile(
         'POSIX'  => 0,
         'parent' => 0,
     },
+
+    CONFIGURE_REQUIRES => {
+        'ExtUtils::MakeMaker' => 6.56,
+    },
+
     BUILD_REQUIRES => {
         'Test::More'       => 0.96,
         'Test::NoWarnings' => 0,

@@ -21,10 +21,26 @@ lc_time - Lexical pragma for strftime.
 
     {
         use lc_time 'nl_NL';
-        printf "Today in nl: %s\n", strftime("%d %b %Y");
+        printf "Today in nl: %s\n", strftime("%d %b %Y", localtime());
+
+        # or on Windows
+        use lc_time 'Russian_Russia';
+        printf "Today in ru: %s\n", strftime("%A %d %B %Y", localtime());
     }
 
 =head1 DESCRIPTION
+
+This pragma switches the locale LC_TIME (or LC_ALL on windows) during the
+C<strftime()> call and returns a decoded() string. C<strftime()> is exported by
+default.
+
+=begin private
+
+=head2 lc_time->import()
+
+Set the hints-hash key B<pragma_LC_TIME> to the locale passed.
+
+=end private
 
 =cut
 
@@ -38,9 +54,27 @@ sub import {
     $^H{pragma_LC_TIME} = $locale;
 }
 
+=begin private
+
+=head2 lc_time->unimport()
+
+Clear the hints-hash key B<pragma_LC_TIME>.
+
+=end private
+
+=cut
+
 sub unimport {
     $^H{pragma_LC_TIME} = undef;
 }
+
+=head2 strftime($template, @localtime)
+
+This is a wrapper around C<POSIX::strftime()> that checks the hints-hash key
+b<pragma_LC_TIME>, and temporarily sets the locale LC_TIME to this value.
+This affects the '%a', '%A', '%b' and '%B' template conversion specifications.
+
+=cut
 
 sub strftime {
     my ($pattern, @arguments) = @_;
@@ -59,11 +93,11 @@ sub strftime {
         setlocale(MY_LC_TIME, $lctime_was);
     }
 
-    my $encoding = get_locale_encoding($lctime_is);
+    my $encoding = _get_locale_encoding($lctime_is);
     return $encoding ? Encode::decode($encoding, $strftime) : $strftime;
 }
 
-sub get_locale_encoding {
+sub _get_locale_encoding {
     my $lc_time = shift;
     eval 'require I18N::Langinfo;';
     my $has_i18n_langinfo = !$@;
@@ -82,10 +116,10 @@ sub get_locale_encoding {
         setlocale(LC_CTYPE, $tmp);
     }
 
-    return $encoding || guess_locale_encoding($lc_time);
+    return $encoding || _guess_locale_encoding($lc_time);
 }
 
-sub guess_locale_encoding {
+sub _guess_locale_encoding {
     my $lc_time = shift;
 
     (my $encoding = $lc_time) =~ s/.+?(?:\.|$)//;
@@ -99,3 +133,26 @@ sub guess_locale_encoding {
 }
 
 1;
+
+=head1 COPYRIGHT
+
+(c) MMXIII - Abe Timmerman <abeltje@cpan.org>
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+See:
+
+=over 4
+
+=item * L<http://www.perl.com/perl/misc/Artistic.html>
+
+=item * L<http://www.gnu.org/copyleft/gpl.html>
+
+=back
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+=cut
