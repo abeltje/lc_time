@@ -43,7 +43,7 @@ my %test = (
         lang    => 'Russian',
         lc_time => 'ru_RU',
         win32   => 'Russian_Russia',
-        expect  => qr/^[мМ]арта? [мМ]ар(?:та)?$/,
+        expect  => qr/^[мМ]арта? [мМ]ар(?:та?)?$/i,
     },
     uk_UA => {
         lang    => 'Ukraenian',
