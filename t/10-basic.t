@@ -25,7 +25,7 @@ my %test = (
         lang    => 'German',
         lc_time => 'de_DE',
         win32   => 'German_Germany',
-        expect  => qr/^März (?:Mär|Mrz)\.?$/,
+        expect  => qr/^März (?:März?|Mrz)\.?$/,
     },
     gd_GB => {
         lang    => 'Gaelic',
@@ -43,7 +43,7 @@ my %test = (
         lang    => 'Russian',
         lc_time => 'ru_RU',
         win32   => 'Russian_Russia',
-        expect  => qr/^[мМ]арта? мар(?:та)?$/,
+        expect  => qr/^[мМ]арта? [мМ]ар(?:та)?$/,
     },
     uk_UA => {
         lang    => 'Ukraenian',
