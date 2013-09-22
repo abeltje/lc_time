@@ -1,9 +1,26 @@
-Changes on 2013-09-21 for repository at:
+Changes on 2013-09-22 for repository at:
   Fetch URL: ssh://git@github.com/abeltje/lc_time.git
   Push  URL: ssh://git@github.com/abeltje/lc_time.git
 
 Enjoy!
 
+________________________________________________________________________________
+[11cbfc0] by abeltje on Sun, 22 Sep 2013 10:33:29 +0200
+
+    
+        * try a version that works for both perl and debian
+
+
+M	lib/lc_time.pm
+________________________________________________________________________________
+[f38653f] by abeltje on Sat, 21 Sep 2013 10:45:31 +0200
+
+     Add the automatically generated Changes file, fix version.
+
+
+A	Changes
+M	MANIFEST
+M	lib/lc_time.pm
 ________________________________________________________________________________
 [73a93a4] by abeltje on Sun, 15 Sep 2013 14:50:19 +0200
 
