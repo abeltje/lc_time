@@ -1,3 +1,14 @@
+liblc_time-perl (0.11) UNRELEASED; urgency=low
+
+    * BUGFix: perl-5.21.1 changed POSIX::strftime
+    
+    POSIX::strftime was changed by 9717af6d049902fc887c412facb2d15e785ef1a4
+    to decode the result (%a/%A/%b/%B) if the current locale is UTF-8.
+    lc_time::strftime() will still also decode for other encodings like
+    ISO8859-*/Big5/KOI8/CP*.
+
+ -- Abe Timmerman <abe.timmerman@xs4all.net>  Tue, 05 May 2015 08:35:00 +0200
+
 liblc_time-perl (0.11) squeeze; urgency=low
 
     * try a version that works for both perl and debian

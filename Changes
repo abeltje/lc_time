@@ -1,9 +1,31 @@
-Changes on 2013-09-22 for repository at:
-  Fetch URL: ssh://git@github.com/abeltje/lc_time.git
-  Push  URL: ssh://git@github.com/abeltje/lc_time.git
+Changes on 2015-05-05 for repository at:
+  Fetch URL: git@github.com:abeltje/lc_time.git
+  Push  URL: git@github.com:abeltje/lc_time.git
 
 Enjoy!
 
+________________________________________________________________________________
+[3d3d7a7] by Abe Timmerman on Tue, 5 May 2015 08:35:00 +0200
+
+     BUGFix: perl-5.21.1 changed POSIX::strftime
+
+        POSIX::strftime was changed by
+        9717af6d049902fc887c412facb2d15e785ef1a4 to decode the result
+        (%a/%A/%b/%B) if the current locale is UTF-8. lc_time::strftime()
+        will still also decode for other encodings like 
+        ISO8859-*/Big5/KOI8/CP*.
+
+
+M	lib/lc_time.pm
+________________________________________________________________________________
+[5269f51] by abeltje on Sun, 22 Sep 2013 11:13:02 +0200
+
+     Autocommit for distribution lc_time 0.11
+
+
+M	Changes
+M	debian/changelog
+M	lib/lc_time.pm
 ________________________________________________________________________________
 [11cbfc0] by abeltje on Sun, 22 Sep 2013 10:33:29 +0200
 
