@@ -116,7 +116,13 @@ sub _get_locale_encoding {
         setlocale(LC_CTYPE, $tmp);
     }
 
-    return $encoding || _guess_locale_encoding($lc_time);
+    $encoding ||= _guess_locale_encoding($lc_time);
+    if (($] > 5.021001) && ($encoding =~ /utf-?8/i)) {
+        # changed by 9717af6d049902fc887c412facb2d15e785ef1a4
+        # that patch decodes only if it's a UTF-8 locale.
+        $encoding = '';
+    }
+    return $encoding
 }
 
 sub _guess_locale_encoding {
