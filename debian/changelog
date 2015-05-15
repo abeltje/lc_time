@@ -1,5 +1,13 @@
 liblc_time-perl (0.11) UNRELEASED; urgency=low
 
+    * Signal OpenBSD is not supported.
+    
+    OpenBSD doesn't support LC_TIME, so no use for CPANTester to look at it.
+
+ -- abeltje <abeltje@test-smoke.org>  Fri, 15 May 2015 14:10:57 +0200
+
+liblc_time-perl (0.11) UNRELEASED; urgency=low
+
     * BUGFix: perl-5.21.1 changed POSIX::strftime
     
     POSIX::strftime was changed by 9717af6d049902fc887c412facb2d15e785ef1a4

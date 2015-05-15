@@ -1,9 +1,29 @@
-Changes on 2015-05-05 for repository at:
+Changes on 2015-05-15 for repository at:
   Fetch URL: git@github.com:abeltje/lc_time.git
   Push  URL: git@github.com:abeltje/lc_time.git
 
 Enjoy!
 
+________________________________________________________________________________
+[47687d9] by abeltje on Fri, 15 May 2015 14:10:57 +0200
+
+     Signal OpenBSD is not supported.
+
+        OpenBSD doesn't support LC_TIME, so no use for CPANTester to look at
+        it.
+
+
+M	Makefile.PL
+M	t/10-basic.t
+________________________________________________________________________________
+[ce9d259] by Abe Timmerman on Tue, 5 May 2015 09:29:12 +0200
+
+     Autocommit for distribution lc_time 0.11_01 (test)
+
+
+M	Changes
+M	debian/changelog
+M	lib/lc_time.pm
 ________________________________________________________________________________
 [3d3d7a7] by Abe Timmerman on Tue, 5 May 2015 08:35:00 +0200
 
