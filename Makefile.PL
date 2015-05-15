@@ -2,6 +2,8 @@
 use v5.10.1;
 use strict;
 
+die "OS unsupported" if $^O eq 'openbsd';
+
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
@@ -23,4 +25,6 @@ WriteMakefile(
         'Test::More'       => 0.96,
         'Test::NoWarnings' => 0,
     },
+
+    MIN_PERL_VERSION => 5.010001,
 );

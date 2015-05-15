@@ -5,6 +5,10 @@ use Encode;
 
 use Test::More;
 
+if ($^O eq 'openbsd') {
+    BAIL_OUT("OS unsupported");
+}
+
 use POSIX ();
 require lc_time;
 
