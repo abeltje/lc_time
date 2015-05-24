@@ -4,7 +4,7 @@ use strict;
 
 die "OS unsupported" if $^O eq 'openbsd';
 
-use ExtUtils::MakeMaker;
+use ExtUtils::MakeMaker 6.47;
 
 WriteMakefile(
     ABSTRACT_FROM => 'lib/lc_time.pm',
@@ -27,4 +27,16 @@ WriteMakefile(
     },
 
     MIN_PERL_VERSION => 5.010001,
+    META_ADD => {
+        'meta-spec' => {
+            version => 2,
+        },
+        'resources' => {
+            repository => {
+                type => 'git',
+                url  => 'git@github.com:abeltje/lc_time.git',
+                web  => 'https://github.com/abeltje/lc_time',
+            },
+        },
+    },
 );
