@@ -1,9 +1,25 @@
-Changes on 2015-05-24 for repository at:
+Changes on 2017-02-05 for repository at:
   Fetch URL: git@github.com:abeltje/lc_time.git
   Push  URL: git@github.com:abeltje/lc_time.git
 
 Enjoy!
 
+________________________________________________________________________________
+[135fcbb] by abeltje on Sun, 5 Feb 2017 14:38:20 +0100
+
+     Fix test
+
+
+M	t/10-basic.t
+________________________________________________________________________________
+[0fe0e33] by abeltje on Sun, 24 May 2015 12:37:30 +0200
+
+     Autocommit for distribution lc_time 0.12 (minor)
+
+
+M	Changes
+M	debian/changelog
+M	lib/lc_time.pm
 ________________________________________________________________________________
 [975f785] by abeltje on Sun, 24 May 2015 12:35:40 +0200
 

@@ -3,7 +3,7 @@ use v5.10.1;
 use warnings;
 use strict;
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 require Encode;
 
