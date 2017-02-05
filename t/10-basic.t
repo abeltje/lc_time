@@ -25,23 +25,29 @@ my %test = (
         win32   => 'Dutch_Netherlands',
         expect  => qr/^maart mrt\.?$/,
     },
-    de_DE => {
-        lang    => 'German',
-        lc_time => 'de_DE',
-        win32   => 'German_Germany',
-        expect  => qr/^März (?:März?|Mrz)\.?$/,
+    fr_FR => {
+        lang    => 'French',
+        lc_time => 'fr_FR',
+        win32   => 'French_France',
+        expect  => qr/^mars mars?$/,
     },
     gd_GB => {
         lang    => 'Gaelic',
         lc_time => 'gd_GB',
         win32   => '',
-        expect  => qr/^Am Màrt Màr\.?$/,
+        expect  => qr/^Am Màrt Màrt?\.?$/,
     },
     pt_PT => {
         lang    => 'Portuguese',
         lc_time => 'pt_PT',
         win32   => 'Portuguese_Portugal',
-        expect  => qr/^Março Mar\.?$/,
+        expect  => qr/^[Mm]arço [Mm]ar\.?$/,
+    },
+    de_DE => {
+        lang    => 'German',
+        lc_time => 'de_DE',
+        win32   => 'German_Germany',
+        expect  => qr/^März (?:März?|Mrz)\.?$/,
     },
     ru_RU => {
         lang    => 'Russian',
@@ -55,12 +61,21 @@ my %test = (
         win32   => 'Ukrainian_Ukraine',
         expect  => qr/^(?:[бБ]ерезня|[бБ]ерезень) [бБ]ер\.?$/,
     },
+    es_ES => {
+        lang    => 'Spanish',
+        lc_time => 'es_ES',
+        win32   => 'Spanish_Spain',
+        expect  => qr/^marzo mar$/,
+    },
 );
 
 my @locale_avail;
 chomp(@locale_avail = qx/locale -a/) if $^O ne 'MSWin32';
 
 binmode(STDOUT, ':encoding(utf8)');
+for my $tm_out (qw/failure_output todo_output output/) {
+    binmode(Test::More->builder->$tm_out, ':utf8');
+}
 
 my $first_lc_time = POSIX::setlocale(lc_time::MY_LC_TIME());
 note("Default LC_TIME: $first_lc_time");
@@ -83,7 +98,7 @@ strftime('%B %b', 0, 0, 0, 1, 2, 2013);
         my $t = eval $prog;
 BAIL_OUT "$@" if $@;
 
-        like($t, $test{$lc}{expect}, encode('utf-8', "$test{$lc}{lang}: $t"));
+        like($t, $test{$lc}{expect}, "$test{$lc}{lang}: $t");
     }
 }
 
