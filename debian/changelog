@@ -1,3 +1,11 @@
+liblc_time-perl (0.14) UNRELEASED; urgency=low
+
+    * FreeBSD changed theire LC_TIME (RT#123414)
+    
+    Short month names in Spanish now have a '.' added at the end.
+
+ -- abeltje <abeltje@test-smoke.org>  Tue, 31 Oct 2017 14:51:35 +0100
+
 liblc_time-perl (0.13) UNRELEASED; urgency=low
 
     * Fix test
