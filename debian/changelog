@@ -1,3 +1,9 @@
+liblc-time-perl (0.15-01) stable; urgency=low
+
+    * Fix packagename in debian/changelog
+
+ -- Abe Timmerman <abeltje@cpan.org>  Tue, 28 Feb 2023 20:18:16 +0100
+
 liblc-time-perl (0.15) UNRELEASED; urgency=low
 
     * Merge branch 'manwar-add-license-meta-name'
