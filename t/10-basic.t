@@ -1,9 +1,7 @@
-#! perl -w
-use strict;
+#! perl -I. -w
+use t::Test::abeltje;
 use utf8;
 use Encode;
-
-use Test::More;
 
 if ($^O eq 'openbsd') {
     BAIL_OUT("OS unsupported");
@@ -105,4 +103,4 @@ BAIL_OUT "$@" if $@;
 my $curr_lc_time = POSIX::setlocale(lc_time::MY_LC_TIME());
 is($curr_lc_time, $first_lc_time, "LC_TIME reverted to $curr_lc_time");
 
-done_testing();
+abeltje_done_testing();

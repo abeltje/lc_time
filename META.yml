@@ -1,0 +1,30 @@
+---
+abstract: 'Lexical pragma for strftime.'
+author:
+  - unknown
+build_requires:
+  Test::Fatal: '0'
+  Test::More: '0.88'
+  Test::Warnings: '0'
+configure_requires:
+  ExtUtils::MakeMaker: '6.56'
+dynamic_config: 1
+generated_by: 'ExtUtils::MakeMaker version 7.64, CPAN::Meta::Converter version 2.150010'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: '1.4'
+name: lc_time
+no_index:
+  directory:
+    - t
+    - inc
+requires:
+  Encode: '0'
+  POSIX: '0'
+  parent: '0'
+  perl: '5.010001'
+resources:
+  repository: https://github.com/abeltje/lc_time
+version: '0.15'
+x_serialization_backend: 'CPAN::Meta::YAML version 0.018'
