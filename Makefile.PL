@@ -2,9 +2,9 @@
 use v5.10.1;
 use strict;
 
-die "OS unsupported" if $^O eq 'openbsd';
-
 use ExtUtils::MakeMaker;
+
+die "OS unsupported" if $^O eq 'openbsd';
 
 WriteMakefile(
     ABSTRACT_FROM => 'lib/lc_time.pm',
